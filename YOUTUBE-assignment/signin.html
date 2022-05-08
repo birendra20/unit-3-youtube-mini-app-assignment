@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./styles/login.css" />
+    <title>signup page</title>
+  </head>
+  <body>
+    <div id="container"></div>
+  </body>
+</html>
+<script type="module">
+  import { signIn, login, getUser } from "./components/signin.js";
+  //   console.log(signup(), Register());
+
+  let page = document.getElementById("container");
+  page.innerHTML = signIn();
+
+  document.getElementById("login_user").addEventListener("submit", (event) => {
+    event.preventDefault();
+    // Register()
+    let response = login();
+  });
+</script>

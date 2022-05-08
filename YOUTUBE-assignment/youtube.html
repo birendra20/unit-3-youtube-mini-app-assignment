@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <link rel="shortcut icon" href="https://1.bp.blogspot.com/-kR0cwNMsf2g/X9v_jO1Oj2I/AAAAAAAARo8/fijDADxYlUUftp8BH74i7akTy2r9T4WQQCLcBGAsYHQ/s0/Youtube%2BIcon%2B-%2BDownload%2BFree%2BVector%2BPNG.png">
+    <title>Youtube</title>
+    <style>
+
+        body{ 
+            padding: 0;
+            margin: 0;
+            background-color: rgb(41, 39, 39);
+        }
+
+        #navbar{
+            display: flex;
+            flex-direction: row;
+            padding: 10px;
+
+        }
+        #navbar>div>img{
+            width: 80px;
+            height: 50px;
+            
+        }
+        #navbar :nth-child(2)>input{
+            margin-left: 30%;
+            width: 600px;
+            height: 40px;
+        }
+        #navbar :nth-child(3)>button{
+            margin-left: 200px;
+            width: 45px;
+            height: 45px;
+            background-image: url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Search_Icon.svg/1024px-Search_Icon.svg.png');
+            background-size: contain;
+        }
+        #navbar :nth-child(3)>button:hover{
+            cursor: pointer;
+        }
+
+        #videos{
+            display: grid;
+            grid-template-columns: 21% 21% 21% 21% ;
+            grid-gap: 5%;
+        }
+    </style>
+</head>
+<body>
+    <div id="navbar">
+        <div>
+            <img src="https://cdn57.androidauthority.net/wp-content/uploads/2017/08/new-youtube-logo.jpg">
+        </div>
+        <div>
+            <input type="text" id="input1">
+        </div>
+        <div>
+            <button onclick="show()"></button>
+        </div>
+    </div>
+
+    <div id="videos"></div>
+</body>
+</html>
+
+<script>
+    let videos_div = document.getElementById('videos');
+    async function most_popular()
+    {
+
+        let res = await fetch('https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2CcontentDetails%2Cstatistics&chart=mostPopular&regionCode=IN&key=AIzaSyBld_pcumU4ld8VgZ0gihFbgpKD9mXIuXo&maxResults=20');
+
+        let data = await res.json();
+
+       
+
+        let div = document.createElement('div');
+
+        let {items} = data;
+
+        items = items.filter((el)=>{
+            return el.id != undefined;
+        });
+
+         items.forEach(({ id }) => {
+            console.log('video:', id)
+
+            let div = document.createElement('div');
+
+            div.style.marginTop = "20px";
+             div.style.marginLeft = "5px";
+
+            div.innerHTML = `<iframe src="https://www.youtube.com/embed/${id}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+
+
+            videos_div.appendChild(div);
+        })
+
+
+        console.log('data:', data)
+
+    }
+
+    most_popular()
+
+
+
+     async function show() {
+
+        
+        
+
+            let q = document.getElementById('input1').value;
+            let res = await fetch(`https://youtube.googleapis.com/youtube/v3/search?q=${q}&key=AIzaSyBld_pcumU4ld8VgZ0gihFbgpKD9mXIuXo&maxResults=20`);
+
+            let data = await res.json();
+
+            let videos_div = document.getElementById('videos');
+
+            videos_div.innerHTML = null;
+
+            let div = document.createElement('div');
+
+            let { items } = data;
+
+            items = items.filter((el) => {
+                return el.id.videoId != undefined;
+            });
+
+            items.forEach(({ id: { videoId } }) => {
+                console.log('video:', videoId)
+
+                let div = document.createElement('div');
+
+                div.style.marginTop = "20px";
+                div.style.marginLeft = "5px";
+
+                div.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+
+
+                videos_div.appendChild(div);
+            })
+
+
+            
+
+        }
+
+</script>

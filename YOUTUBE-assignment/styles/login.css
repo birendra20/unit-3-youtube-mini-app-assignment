@@ -1,0 +1,89 @@
+label,
+input[type="submit"] {
+  display: block;
+}
+input {
+  margin-bottom: 2%;
+}
+#main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+form {
+  width: 30%;
+  padding: 2%;
+  padding-top: 0;
+  /* margin-top: 2%; */
+  box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+input {
+  width: 80%;
+  height: 30px;
+}
+input,
+label {
+  margin-left: 5%;
+}
+label {
+  margin-bottom: 2%;
+  font-size: 20px;
+  font-weight: 600;
+  color: teal;
+}
+input[type="submit"] {
+  border: none;
+  width: 82%;
+  height: 30px;
+  border-radius: 5px;
+  background-color: aqua;
+  font-weight: bold;
+  color: white;
+  margin-left: 5%;
+  padding: 5px 10px;
+  /* margin-left: auto; */
+}
+form > h2 {
+  text-align: center;
+  color: darkcyan;
+  width: 60%;
+  font-size: 30px;
+  margin-left: 17%;
+  /* border: 1px solid black; */
+  /* padding-right: 4%; */
+}
+form > img {
+  height: 80px;
+  width: 150px;
+  text-align: center;
+  /* border: 1px solid black; */
+  margin-left: 30%;
+}
+
+#login_user {
+  width: 20%;
+  padding-top: 0;
+}
+#login_user > img {
+  margin-left: 20%;
+  /* border: 1px solid black; */
+}
+#login_user > input {
+  margin-bottom: 10%;
+  height: 30px;
+}
+
+#foot {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  text-decoration: underline;
+}
+
+#option {
+  display: flex;
+  justify-content: center;
+  color: brown;
+  margin-bottom: 1%;
+}

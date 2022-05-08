@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Youtube</title>
+    <link rel="stylesheet" href="./styles/index.css" />
+    <script
+      src="https://kit.fontawesome.com/683b4b40e3.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div id="navigation"></div>
+    <div class="filter_container"></div>
+    <div class="main-container">
+      <aside>
+        <div class="upper-box">
+          <div>
+            <span class="aside-icon">
+              <i class="fas fa-home"></i>
+            </span>
+            <div class="aside-heading">Home</div>
+          </div>
+          <div>
+            <span class="aside-icon">
+              <i class="fas fa-arrows-alt"></i>
+            </span>
+            <div class="aside-heading">Explore</div>
+          </div>
+          <div>
+            <span class="aside-icon">
+              <i class="fas fa-plus-circle"></i>
+            </span>
+            <div class="aside-heading">Subscription</div>
+          </div>
+        </div>
+        <div class="lower-box">
+          <div>
+            <span class="aside-icon">
+              <i class="fas fa-book-reader"></i>
+            </span>
+            <div class="aside-heading">Library</div>
+          </div>
+          <div>
+            <span class="aside-icon">
+              <i class="fas fa-history"></i>
+            </span>
+            <div class="aside-heading">History</div>
+          </div>
+          <div>
+            <span class="aside-icon">
+              <i class="fas fa-video"></i>
+            </span>
+            <div class="aside-heading">Your Video</div>
+          </div>
+          <div>
+            <span class="aside-icon"> <i class="fas fa-clock"></i></span>
+            <div class="aside-heading">Watch Later</div>
+          </div>
+          <div>
+            <span class="aside-icon">
+              <i class="fas fa-money-check"></i>
+            </span>
+            <div class="aside-heading">Show More</div>
+          </div>
+        </div>
+      </aside>
+
+      <main><div id="search_results"></div></main>
+    </div>
+  </body>
+</html>
+<script type="module">
+  let API = "AIzaSyDzAHA4RHxBBHoWI6rDbozYX9L0PFn5aNo";
+
+  const results_div = document.getElementById("search_results");
+
+  import navbar from "./components/navbar.js";
+
+  import tags from "./components/tags.js";
+
+  let nav = document.getElementById("navigation");
+
+  nav.innerHTML = navbar();
+
+  console.log(tags());
+
+  let tags_div = document.getElementsByClassName("filter_container");
+
+  tags_div.innerHTML = tags();
+
+  // let video_query = document.getElementById("video").value;
+  //SHOW MOST POPULAR VIDEOS
+  var popular_url = `https://www.googleapis.com/youtube/v3/videos/?part=snippet&chart=mostPopular&regionCode=IN&maxResults=32&key=${API}`;
+  popularVideo(popular_url);
+
+  //trending/popular videos
+  async function popularVideo(url) {
+    try {
+      // let url = `https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${video_query}&type=video&key=${API}&maxResults=20`;
+      let response = await fetch(url);
+      let popular_data = await response.json();
+
+      //   video arr from the response
+      let video_arr = popular_data.items;
+      appendVideos(video_arr);
+      console.log("Data:", video_arr);
+      localStorage.setItem("video_arr", JSON.stringify(video_arr));
+    } catch (err) {
+      console.log("err: ", err);
+    }
+  }
+
+  document.querySelector(".search").addEventListener("click", () => {
+    let video_query = document.getElementById("video").value;
+    searchVideo(video_query);
+  });
+
+  document.querySelector("#video").addEventListener("keypress", (e) => {
+    console.log("e:", e);
+    if (e.key == "Enter") {
+      let video_query = document.getElementById("video").value;
+      searchVideo(video_query);
+    }
+  });
+
+  // searchVideo function will fetch the data from youtube
+  async function searchVideo(video_query) {
+    try {
+      let url = `https://youtube.googleapis.com/youtube/v3/search?part=snippet&q=${video_query}&type=video&key=${API}&maxResults=20`;
+      let response = await fetch(url);
+      let data = await response.json();
+
+      //   video arr from the response
+      let video_arr = data.items;
+      appendVideos(video_arr);
+      console.log("Data:", video_arr);
+      localStorage.setItem("video_arr", JSON.stringify(video_arr));
+    } catch (err) {
+      console.log("err: ", err);
+    }
+  }
+
+  //will fetch data on enter key also
+  let input = document.getElementById("video");
+  input.addEventListener("keypress", searchVideo);
+
+  //   displaying videos using arrow function
+  const appendVideos = (items) => {
+    results_div.innerHTML = null;
+
+    // looping over the array
+    items.forEach(({ snippet, id: { videoId } }) => {
+      console.log("snippets", snippet);
+
+      //main div for video
+      let div = document.createElement("div");
+
+      //title of the video
+      let title = document.createElement("p");
+      title.textContent = snippet.title;
+      title.style.color = "white";
+      title.style.fontSize = "14px";
+
+      //thumbnail of the video
+      let thumbnail = document.createElement("img");
+      thumbnail.style.width = "250px";
+      thumbnail.src = snippet.thumbnails.medium.url;
+
+      //creating object
+      let data_to_Send = {
+        snippet: snippet,
+        videoId: videoId,
+      };
+
+      //adding event listener
+      div.onclick = () => {
+        showVideo(data_to_Send);
+      };
+
+      div.append(thumbnail, title);
+      //appending it to the results div
+      results_div.append(div);
+    });
+  };
+
+  //storing the data in the local storage and going to video page
+  function showVideo(data) {
+    localStorage.setItem("clicked_video", JSON.stringify(data));
+    window.location.href = "video.html";
+  }
+</script>
